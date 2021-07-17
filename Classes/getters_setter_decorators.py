@@ -31,11 +31,11 @@ class Employee:
 
 emp1 = Employee("Smith", 23)
 
-emp1.name
+print (emp1.name)
 emp1.age
 emp1.name = "Nate"
 emp1.age = 33
-emp1.name
+print (emp1.name)
 emp1.age
 del emp1.name
 emp1.age
