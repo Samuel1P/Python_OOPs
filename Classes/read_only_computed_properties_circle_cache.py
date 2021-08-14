@@ -27,19 +27,20 @@ class Circle():
     def area(self):
         if self._area is None:
             print ("doing area calculation....")
+            import time
+            time.sleep(3)
             self._area = pi * (self.radius ** 2)
         return self._area
 
 ball = Circle(5)
 print (ball.__dict__)
+print (dir(ball))
 print (ball.radius)
 print (ball.area)
 ball.radius = 2
 print (ball.radius)
-print (ball.__dict__)
 print (ball.area)
 print (ball.area)
-print (ball.__dict__)
 print (ball.area)
 print (ball.area)
 
