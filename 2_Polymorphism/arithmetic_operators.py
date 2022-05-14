@@ -4,18 +4,20 @@ Author: Samuel I P
 """
 from __future__ import annotations
 from numbers import Real
-from typing import Iterable
 
 class Vector:
     """
     A vector with x and y co-ordinate value
     """
-    def __init__(self, *components: Iterable) -> None:
+    def __init__(self, *components: tuple[Real]) -> None:
+        """
+        init method that takes in x and y value as an unpacked iterable.
+        """
         Vector.validate_input_vector(components)
         self.components = tuple(components)
     
     @staticmethod
-    def validate_input_vector(co_ordinates_input: list) -> None:
+    def validate_input_vector(co_ordinates_input: tuple[Real]) -> None:
         """
         Checks the input co-ordinates
         Args:
@@ -30,7 +32,7 @@ class Vector:
             raise ValueError(f"Wrong co-ordinate length. Actual: {len(co_ordinates_input)}, Expected: 2")
         for location in co_ordinates_input:
             if not isinstance(location, Real):
-                raise TypeError(f"Wrong co-ordinate type.  Actual: {type(location).__name__}, Expected: int")
+                raise TypeError(f"Wrong co-ordinate type.  Actual: {type(location).__name__}, Expected: Real (int)")
         return
             
     def __repr__(self) -> str:
