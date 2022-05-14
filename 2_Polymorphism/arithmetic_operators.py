@@ -4,12 +4,13 @@ Author: Samuel I P
 """
 from __future__ import annotations
 from numbers import Real
+from typing import Iterable
 
 class Vector:
     """
     A vector with x and y co-ordinate value
     """
-    def __init__(self, *components) -> None:
+    def __init__(self, *components: Iterable) -> None:
         Vector.validate_input_vector(components)
         self.components = tuple(components)
     
