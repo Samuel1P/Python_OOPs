@@ -5,6 +5,7 @@ Author: Samuel I P
 from __future__ import annotations
 from numbers import Real
 
+
 class Vector:
     """
     A vector with x and y co-ordinate value
@@ -44,7 +45,8 @@ class Vector:
         return f"Vector{self.components}"
 
     def __add__(self, other_vector: Vector) -> Vector:
-        """Adds two vectors
+        """
+        Adds two vectors
         Args:
             other_vector (Vector): the second vector as arg
         Returns:
@@ -53,13 +55,69 @@ class Vector:
         sum_vector = (x + y for x, y in zip(self.components, other_vector.components))
         return Vector(*sum_vector)
     
+    def __sub__(self, other_vector: Vector) -> Vector:
+        """
+        Substracts two vectors
+        Args:
+            other_vector (Vector): the second vector as arg
+        Returns:
+            Vector: sum of both vectors
+        """
+        sum_vector = (x - y for x, y in zip(self.components, other_vector.components))
+        return Vector(*sum_vector)
+
+    def __mul__(self, other: Real | Vector) -> Vector | Real:
+        """
+        Multiply vectors with vectors and numbers
+        Args:
+            other (Real | Vector): a vector or integer 
+        Returns:
+            Vector | Real: a result vector or integer 
+        """
+        if isinstance(other, Real):
+            mul_vector = (item * other for item in self.components)
+            return Vector(*mul_vector)
+        if isinstance(other, Vector):
+            mul_values = (x * y for x, y in zip(self.components, other.components))
+            return sum(mul_values)
+        return NotImplemented
+    
+    def __rmul__(self, other: Real) -> Vector:
+        """
+        To multiply number and vector (reflective mul)
+        Args:
+            other (Real): The number
+        Returns:
+            Vector: result vector
+        """
+        return self * other 
     
 loc1 = Vector(2, 4)
 print(loc1) # Vector(2, 4)
 loc2 = Vector(5, 10)
 print(loc2) # Vector(5, 10)
+
+# add
 loc3 = loc1 + loc2
 print(loc3) # Vector(7, 14)
+
+# substract
+loc4 = loc3 - loc3
+print(loc4) # Vector(0, 0)
+
+# multiply
+loc5 = loc1 * 2
+print(loc5) # Vector(4, 8)
+loc6 = 2 * loc1
+print(loc6) # Vector(4, 8)
+
+# dot product - (2, 4) & (5, 10)
+# (2 * 5) + (4 * 10); 10 + 40; 50
+loc7 = loc1 * loc2
+print(loc7) # 50
+
+# to do
+# iadd, neg and abs
 
 # exceptions
 # loc4 = Vector("2", 5) # TypeError: Wrong co-ordinate type.  Actual: str, Expected: int
