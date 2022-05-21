@@ -1,5 +1,22 @@
+# venv
+
+
+#pycache
+*.pyc 
+**/__pycache__
+
+# vs code ws
 *.code-workspace
-*.DS_Store
-.DS_Store
-.idea
 .vscode
+
+# db files
+db_dir/
+
+
+# mac
+.DS_Store
+*.DS_Store
+
+# pycharm
+.idea
+/**/.idea/*

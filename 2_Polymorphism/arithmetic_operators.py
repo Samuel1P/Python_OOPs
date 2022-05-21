@@ -4,6 +4,7 @@ Author: Samuel I P
 """
 from __future__ import annotations
 from numbers import Real
+from math import sqrt
 
 
 class Vector:
@@ -16,6 +17,8 @@ class Vector:
         """
         Vector.validate_input_vector(components)
         self.components = tuple(components)
+        self.x = self.components[0]
+        self.y = self.components[1]
     
     @staticmethod
     def validate_input_vector(co_ordinates_input: tuple[Real]) -> None:
@@ -92,6 +95,14 @@ class Vector:
         """
         return self * other 
     
+    def __neg__(self) -> Vector:
+        neg_vector = (-i for i in self.components)
+        return Vector(*neg_vector)
+    
+    def __abs__(self) -> int:
+        return sqrt(sum(i**2 for i in self.components))
+
+
 loc1 = Vector(2, 4)
 print(loc1) # Vector(2, 4)
 loc2 = Vector(5, 10)
@@ -113,12 +124,14 @@ print(loc6) # Vector(4, 8)
 
 # dot product - (2, 4) & (5, 10)
 # (2 * 5) + (4 * 10); 10 + 40; 50
-loc7 = loc1 * loc2
-print(loc7) # 50
+value = loc1 * loc2
+print(value) # 50
 
+print(loc4 < loc5)
 # to do
 # iadd, neg and abs
 
 # exceptions
 # loc4 = Vector("2", 5) # TypeError: Wrong co-ordinate type.  Actual: str, Expected: int
-# loc4 = Vector(2, 5, 10) # ValueError: Wrong co-ordinate length. Actual: 3, Expected: 2
+# loc4 = Vector(2, 5, 10) # ValueError: Wrong co-ordinate length. Actual: 3, Expected: 
+# 
