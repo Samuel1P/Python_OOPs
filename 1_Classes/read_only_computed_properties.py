@@ -1,6 +1,6 @@
 from math import pi
 
-class Circle():
+class Circle:
     def __init__(self, rad) -> None:
         self._radius = rad
     
@@ -10,7 +10,7 @@ class Circle():
         return self._radius
     
     # radius = radius(fset = radius)
-    # property_obj = exisiting property object with getter ( adding a setter property mehtod)
+    # property_obj = exisiting property object with getter ( adding a setter property method)
     @radius.setter
     def radius(self, value):
         self._radius = value
