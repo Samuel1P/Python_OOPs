@@ -1,1 +1,2 @@
-boolean dunder method
+doc string
+type hinting
