@@ -4,7 +4,9 @@ Author: Samuel I P
 """
 
 from __future__ import annotations
+from functools import total_ordering
 
+@total_ordering
 class Mod:
     """
     Modulus class
@@ -44,8 +46,6 @@ class Mod:
             int: value of m
         """
         return self._mod_value
-    
-
     
     def __hash__(self) -> int:
         """
@@ -95,15 +95,24 @@ class Mod:
         Returns:
             bool: True or False
         """
-        if isinstance(other, int):
-            other_mod = Mod(other, self.mod_value)
-        elif isinstance(other, Mod):
-            other_mod = other
-        else:
-            raise TypeError(f"Expects type int or Mod. Actual type is {type(other)} ({other})")
-        if other_mod.mod_value != self.mod_value:
-            raise ArithmeticError(f"Cannot compare operands with different modulus. Actual: {self.mod_value} and {other_mod.mod_value}")
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
         return self.value == other_mod.value
+    
+    def __gt__(self, other: int|Mod) -> bool:
+        """
+        Greater than Check for mods and ints
+        Args:
+            other (int | Mod): second operand
+        Raises:
+            TypeError: Raise if second operand is not int or Mod
+        Returns:
+            bool: True or False
+        """
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
+        return self.value > other_mod.value
+    
     
     def __add__(self, other: int|Mod) -> Mod:
         """
@@ -116,14 +125,8 @@ class Mod:
         Returns:
             Mod: summed mod
         """
-        if isinstance(other, int):
-            other_mod = Mod(other, self.mod_value)
-        elif isinstance(other, Mod):
-            other_mod = other
-        else:
-            raise TypeError(f"Expects type int or Mod. Actual type is {type(other)} ({other})")
-        if other_mod.mod_value != self.mod_value:
-            raise ArithmeticError(f"Cannot compare operands with different modulus. Actual: {self.mod_value} and {other_mod.mod_value}")
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
         return Mod(self.value + other_mod.value, self.mod_value)
         
     def __sub__(self, other: int|Mod) -> Mod:
@@ -137,14 +140,8 @@ class Mod:
         Returns:
             Mod: substracted mod
         """
-        if isinstance(other, int):
-            other_mod = Mod(other, self.mod_value)
-        elif isinstance(other, Mod):
-            other_mod = other
-        else:
-            raise TypeError(f"Expects type int or Mod. Actual type is {type(other)} ({other})")
-        if other_mod.mod_value != self.mod_value:
-            raise ArithmeticError(f"Cannot compare operands with different modulus. Actual: {self.mod_value} and {other_mod.mod_value}")
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
         return Mod(self.value - other_mod.value, self.mod_value)
 
         
@@ -159,14 +156,8 @@ class Mod:
         Returns:
             Mod: multiplied mod
         """
-        if isinstance(other, int):
-            other_mod = Mod(other, self.mod_value)
-        elif isinstance(other, Mod):
-            other_mod = other
-        else:
-            raise TypeError(f"Expects type int or Mod. Actual type is {type(other)} ({other})")
-        if other_mod.mod_value != self.mod_value:
-            raise ArithmeticError(f"Cannot compare operands with different modulus. Actual: {self.mod_value} and {other_mod.mod_value}")
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
         return Mod(self.value * other_mod.value, self.mod_value)
 
     def __pow__(self, other: int|Mod) -> Mod:
@@ -180,26 +171,108 @@ class Mod:
         Returns:
             Mod: multiplied mod
         """
-        if isinstance(other, int):
-            other_mod = Mod(other, self.mod_value)
-        elif isinstance(other, Mod):
-            other_mod = other
-        else:
-            raise TypeError(f"Expects type int or Mod. Actual type is {type(other)} ({other})")
-        if other_mod.mod_value != self.mod_value:
-            raise ArithmeticError(f"Cannot compare operands with different modulus. Actual: {self.mod_value} and {other_mod.mod_value}")
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
         return Mod(self.value ** other_mod.value, self.mod_value)
     
+    def __iadd__(self, other: int|Mod) -> Mod:
+        """
+        in place addition of two mods or mod and an int
+        Args:
+            other (int | Mod): second operand
+        Raises:
+            TypeError: if second operand is not int or Mod
+            ArithmeticError: if second operand is of different mod
+        Returns:
+            Mod: summed mod
+        """
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
+        return self + other_mod
     
+    def __isub__(self, other: int|Mod) -> Mod:
+        """
+        In place subsctration of two mods or mod and an int
+        Args:
+            other (int | Mod): second operand
+        Raises:
+            TypeError: if second operand is not int or Mod
+            ArithmeticError: if second operand is of different mod
+        Returns:
+            Mod: summed mod
+        """
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
+        return self - other_mod
+    
+    
+    def __imul__(self, other: int|Mod) -> Mod:
+        """
+        In place Multiplication of two mods or mod and an int
+        Args:
+            other (int | Mod): second operand
+        Raises:
+            TypeError: if second operand is not int or Mod
+            ArithmeticError: if second operand is of different mod
+        Returns:
+            Mod: multiplied mod
+        """
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
+        return self * other_mod
+    
+    def mod_check(self, operand):
+        """
+        Modulus check of input operand with self
+        Args:
+            operand (Mod): other operand
+        Raises:
+            ArithmeticError: Different modulus to self
+        """
+        if operand.mod_value != self.mod_value:
+            raise ArithmeticError(f"Cannot compare operands with different modulus. Actual: {self.mod_value} and {operand.mod_value}")
+        return True
+
+    def type_check(self, operand):
+        """
+        Check if the operand is int or mod
+        Args:
+            input_data (int|Mod): other operand
+        Raises:
+            TypeError: Wrong type
+        """
+        if isinstance(operand, int):
+            other_mod = Mod(operand, self.mod_value)
+        elif isinstance(operand, Mod):
+            other_mod = operand
+        else:
+            raise TypeError(f"Expects type int or Mod. Actual type is {type(operand)} ({operand})")
+        return other_mod
+
+
 A = Mod(10,12)
 B = Mod(22,12)
 C = 3
+D = 10
+E = Mod(142,12)
 
-print(repr(A))
-print(repr(B))
-print(A==C)
-print(A==B)
+print(repr(A)) # Mod(10, 12)
+print(repr(C)) # 3
 
-print(hash(A))
-print(int(A))
-print(repr(A+B))
+
+print(A==C) # False
+print(A>C) # True
+print(A==B) # True
+print(A>=D) # True
+
+print(hash(E)) # 10
+print(int(E)) # 10
+print(repr(A+B)) # Mod(8, 12)
+A += 22
+print(repr(A))  # Mod(8, 12)
+
+
+print(repr(A * C)) # Mod(0, 12)
+
+A*=C
+print(repr(A)) # Mod(0, 12)
