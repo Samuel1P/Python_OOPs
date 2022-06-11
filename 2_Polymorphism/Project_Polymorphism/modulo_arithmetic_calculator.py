@@ -5,6 +5,7 @@ Author: Samuel I P
 
 from __future__ import annotations
 from functools import total_ordering
+from time import sleep
 
 @total_ordering
 class Mod:
@@ -22,12 +23,14 @@ class Mod:
             TypeError: if input_value is not of integer type.
         """
         if not isinstance(n_value, int):
-            raise TypeError(f"Expects type int. Actual type is {type(n_value)} ({n_value})")
+            raise TypeError(f"Expects type int for value. Actual type is {type(n_value)} ({n_value})")
+        if not isinstance(mod_value, int):
+            raise TypeError(f"Expects type int for modulus. Actual type is {type(mod_value)} ({mod_value})")
         if mod_value <= 0:
-            raise ArithmeticError(f"Expects postitive integers. Actual {mod_value}")
+            raise ArithmeticError(f"Expects postitive integers for modulus. Actual {mod_value}")
         self.n_value = n_value
         self._mod_value = mod_value
-        self._value = self.calculate_modulo(self.n_value, self._mod_value)
+        self._value = self.n_value % self._mod_value
     
     @property
     def value(self) -> int:
@@ -53,7 +56,7 @@ class Mod:
         Returns:
             int: hash value
         """
-        return hash(self.value)
+        return hash((self.value, self.mod_value))
     
     def __int__(self) -> int:
         """
@@ -80,9 +83,6 @@ class Mod:
             str: instance representation.
         """
         return f"Mod({self._value}, {self._mod_value})"
-    
-    def calculate_modulo(self, value: int, mod: int) -> Mod:
-        return value % mod
     
     
     def __eq__(self, other: int|Mod) -> bool:
@@ -127,6 +127,7 @@ class Mod:
         """
         other_mod = self.type_check(other)
         self.mod_check(other_mod)
+        print("doing __add__")
         return Mod(self.value + other_mod.value, self.mod_value)
         
     def __sub__(self, other: int|Mod) -> Mod:
@@ -188,7 +189,8 @@ class Mod:
         """
         other_mod = self.type_check(other)
         self.mod_check(other_mod)
-        return self + other_mod
+        self._value = self.value + other_mod.value
+        return self
     
     def __isub__(self, other: int|Mod) -> Mod:
         """
@@ -203,7 +205,8 @@ class Mod:
         """
         other_mod = self.type_check(other)
         self.mod_check(other_mod)
-        return self - other_mod
+        self._value = self.value - other_mod.value
+        return self
     
     
     def __imul__(self, other: int|Mod) -> Mod:
@@ -219,7 +222,24 @@ class Mod:
         """
         other_mod = self.type_check(other)
         self.mod_check(other_mod)
-        return self * other_mod
+        self._value = (self.value * other_mod.value) % self.mod_value
+        return self
+
+    def __ipow__(self, other: int|Mod) -> Mod:
+        """
+        in-place exponential of two mods or mod and an int
+        Args:
+            other (int | Mod): second operand
+        Raises:
+            TypeError: if second operand is not int or Mod
+            ArithmeticError: if second operand is of different mod
+        Returns:
+            Mod: multiplied mod
+        """
+        other_mod = self.type_check(other)
+        self.mod_check(other_mod)
+        self._value = (self.value ** other_mod.value ) % self.mod_value
+        return self
     
     def mod_check(self, operand):
         """
@@ -255,7 +275,7 @@ B = Mod(22,12)
 C = 3
 D = 10
 E = Mod(142,12)
-
+"""
 print(repr(A)) # Mod(10, 12)
 print(repr(C)) # 3
 
@@ -268,11 +288,28 @@ print(A>=D) # True
 print(hash(E)) # 10
 print(int(E)) # 10
 print(repr(A+B)) # Mod(8, 12)
-A += 22
-print(repr(A))  # Mod(8, 12)
+"""
+print("==")
+
+A = Mod(9,12)
+print(A, A.value, A.mod_value, id(A))
+
+A += 1
+print(A, A.value, A.mod_value, id(A))  # Mod(9, 12)
+print("==")
 
 
-print(repr(A * C)) # Mod(0, 12)
+A = Mod(9,12)
+print(A, A.value, A.mod_value, id(A))
 
+A = A + 1
+print(A, A.value, A.mod_value, id(A))  # Mod(9, 12)
+print("==")
+
+"""
+A * C # Mod(0, 12)
+print(A, A.value, A.mod_value)
+A = Mod(10,12)
 A*=C
-print(repr(A)) # Mod(0, 12)
+print(A, A.value, A.mod_value)
+"""
