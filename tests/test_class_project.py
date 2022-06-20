@@ -1,18 +1,30 @@
 """
 Test Suite for the Class section projects solution
 """
-from ClassesSection.Project_classes_solution import project_class_solution
+import pytest
+from ClassesSection.Project_classes_solution.project_class_solution import Account
+
+
 
 class TestBankingProject:
     """
     Test Class
     """
-    def setup_class(self):
-        """setup class to run before the start of first test.
+    def setup_method(self):
         """
-        self.transact_map = project_class_solution.transact_op_map
-        self.Account = project_class_solution.Account
-        self.TransactionNumber = project_class_solution.TransactionNumber
+        setup method to run before the start of each test.
+        """
+        acc_number = 1
+        fname = "Robert"
+        lname = "Kenny"
+        user_tz = "UTC"
+        self.test_account = Account(acc_number=acc_number, fname=fname, lname=lname, user_tz=user_tz)
+    
+    def test_create_account(self):
+        assert self.test_account.account_number == 1
+        assert self.test_account.first_name == "Robert"
+        assert self.test_account.last_name == "Kenny"
+        assert self.test_account.user_tz == "UTC"
         
-    
-    
+    def teardown_method(self):
+        del self.test_account

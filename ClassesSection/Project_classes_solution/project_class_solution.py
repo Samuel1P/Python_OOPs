@@ -62,10 +62,23 @@ class Account:
         self._last_name = lname
         self._user_tz = user_tz
         self._balance = Decimal('0.00')
+
     
     @property
     def balance(self):
         return self._balance.quantize(Account.paise_rounding, ROUND_HALF_UP)
+    
+    @property
+    def account_number(self):
+        return self._account_number
+    
+    @property
+    def first_name(self):
+        return self._first_name
+    
+    @property
+    def last_name(self):
+        return self._last_name
     
     @property
     def user_tz(self):
@@ -179,7 +192,7 @@ class Account:
     def parse_confirmation_code_class(code, tz="UTC"):
         return TransactionNumber(code, tz)
 
-
+"""
 print (f"{'#'*50} Script starts {'#'*50}") 
 Tom = Account("123", "Tom", "Smith") # create account
 print (f"Tom initial balance --> {Tom.balance}")
@@ -221,3 +234,6 @@ print (f"Transaction six - transaction_id : {Tom_tracaction_six.transaction_id}"
 print (f"Transaction six - account_number : {Tom_tracaction_six.account_number}")
 print()
 print (f"{'#'*50} Script Completion {'#'*50}") 
+
+
+"""
