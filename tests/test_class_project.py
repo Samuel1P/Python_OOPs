@@ -3,13 +3,17 @@ Test Suite for the Class section projects solution
 """
 import pytest
 from ClassesSection.Project_classes_solution.project_class_solution import Account
-
+from tests.HelperModule import get_logger_instance
 
 
 class TestBankingProject:
     """
     Test Class
     """
+    def setup_class(self):
+        self.log = get_logger_instance("TestBankingProject")
+        self.log.info("Starting TestBankingProject test.")
+        
     def setup_method(self):
         """
         setup method to run before the start of each test.
@@ -28,3 +32,6 @@ class TestBankingProject:
         
     def teardown_method(self):
         del self.test_account
+        
+    def teardown_class(self):
+        self.log.info("Closing TestBankingProject test.")

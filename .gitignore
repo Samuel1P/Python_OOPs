@@ -20,3 +20,8 @@ db_dir/
 # pycharm
 .idea
 /**/.idea/*
+
+
+# test logs and reports
+test_logs/
+test_reports/
