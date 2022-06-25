@@ -23,5 +23,11 @@ db_dir/
 
 
 # test logs and reports
+.log
+*.log
 test_logs/
 test_reports/
+
+
+# misc
+tests/FrameworkLogger.py
