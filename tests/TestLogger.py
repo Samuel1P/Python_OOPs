@@ -8,6 +8,7 @@ import sys
 from logging import FileHandler, StreamHandler
 import traceback
 # from tests.FrameworkLogger import INFO, ERROR, configure
+# pytest --log-cli-level=10
 
 def log_info(msg):
   logger = (logging.tests)
