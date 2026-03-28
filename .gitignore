@@ -1,9 +1,18 @@
 # venv
+venv/
+.venv/
+env/
 
+# pycache
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+**/__pycache__/
 
-#pycache
-*.pyc 
-**/__pycache__
+# python caches
+.cache/
+.pytest_cache/
 
 # vs code ws
 *.code-workspace
