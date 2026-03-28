@@ -40,3 +40,5 @@ test_reports/
 
 # misc
 tests/FrameworkLogger.py
+
+.env
